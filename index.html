@@ -3,8 +3,55 @@
 <html>
     <head>
         <title>Recipe Book</title>
+        <link rel="stylesheet" href="styles/main.css">
     </head>
     <body>
-        
+        <div class="title">
+            <h1>Recipe Book</h1>
+            <hr>
+        </div>
+        <div class="navigation">
+            <a class="navigation" href="">Recipe List</a>
+            <a class="navigation" href="">Shopping List</a>
+        </div>
+
+        <div class="primary-body">
+            <div class="recipe-list">
+                <h2>Recipe List</h2>
+                <input class="search-box" type="text" placeholder="Search Recipes..."><br>
+                <button class="search-button">Search</button><br>
+                <hr>
+                <button class="recipe-button">Recipe 1</button><br><br>
+                <button class="recipe-button">Recipe 2</button><br><br>
+                <button class="recipe-button">Recipe 3</button><br><br>
+            </div>
+            
+            <div class="recipe-main">
+                <h2 style="text-align: center">Recipe 1</h2>
+                <h4 class="description-text" style="text-align: center">Description goes here.</h4>
+                <hr>
+                <ul>
+                    <li>Time to Bake: 20 minutes.</li>
+                    <li>Serves: 4 people.</li>
+                </ul>
+                <hr>
+                <h3 style="text-align: center">Ingredients:</h3>
+                <button class="search-button" style="text-align: center">Add Ingredients to Shopping List</button>
+                <ul>
+                    <li>200g Baking Soda</li>
+                    <li>250g Flour</li>
+                    <li>5 Glowsticks</li>
+                </ul>
+                <hr>
+                <h3 style="text-align: center">Steps:</h3>
+                <ol>
+                    <li>Add the baking soda and flour to a large pot. Stir.</li><br>
+                    <li>After five minutes of stirring the powder, break the glowsticks and add them into the pot.</li><br>
+                    <li>Add 500g of water from the tap.</li><br>
+                    <li>Bake for 20 minutes in the oven.</li><br>
+                    <li>Serve to your guests when hot and run for the hills.</li><br>
+                </ol>
+            </div>
+        </div>
     </body>
 </html>

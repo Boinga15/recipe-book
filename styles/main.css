@@ -1,0 +1,85 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.title {
+    text-align: center;
+    padding-top: 1px;
+    background-color: grey;
+}
+
+div.navigation {
+    background-color: antiquewhite;
+    position: fixed;
+    bottom: 1%;
+    width: 100%;
+}
+
+a.navigation {
+    background-color: #007a25;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.navigation:hover, a.navigation:active {
+    background-color: #00cc3d;
+}
+
+.recipe-list {
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    overflow-x: hidden;
+    text-align: center;
+
+    left: 0;
+
+    background-image: linear-gradient(to right, white 99.8%, black 0.2%);
+    height: 81%;
+}
+
+.recipe-main {
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    overflow-x: hidden;
+    text-align: left;
+
+    right: 0;
+}
+
+.recipe-button {
+    border: none;
+    color: white;
+    background-color: green;
+    padding: 15px 32px;
+    font-size: 14px;
+    border-radius: 12px;
+    width: 80%;
+}
+
+.recipe-button:hover {
+    background-color: #00cc3d;
+}
+
+.search-box {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+.search-button {
+    border: none;
+    color: white;
+    background-color: green;
+    padding: 10px 25px;
+    font-size: 12px;
+    border-radius: 12px;
+}
+
+.search-button:hover {
+    background-color: #00cc3d;
+}
