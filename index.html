@@ -4,6 +4,7 @@
     <head>
         <title>Recipe Book</title>
         <link rel="stylesheet" href="styles/main.css">
+        <script src="scripts/recipe-list.js"></script>
     </head>
     <body>
         <div class="title">
@@ -18,39 +19,72 @@
         <div class="primary-body">
             <div class="recipe-list">
                 <h2>Recipe List</h2>
-                <input class="search-box" type="text" placeholder="Search Recipes..."><br>
-                <button class="search-button">Search</button><br>
+                <button class="search-button" onclick="addRecipeInitialisation()">Add Recipe</button><br>
                 <hr>
-                <button class="recipe-button">Recipe 1</button><br><br>
-                <button class="recipe-button">Recipe 2</button><br><br>
-                <button class="recipe-button">Recipe 3</button><br><br>
+                <input id="search-box" class="search-box" type="text" oninput="reloadRecipeList()" placeholder="Search Recipes..."><br>
+                <hr>
+                <div id="main-recipe-list"></div>
             </div>
             
-            <div class="recipe-main">
-                <h2 style="text-align: center">Recipe 1</h2>
-                <h4 class="description-text" style="text-align: center">Description goes here.</h4>
+            <div id="recipe-main" style="display: none" class="recipe-main">
+                <h2 id="show-recipe-name" style="text-align: center">Recipe 1</h2>
+                <h4 id="show-recipe-description" class="description-text" style="text-align: center">Description goes here.</h4>
                 <hr>
                 <ul>
-                    <li>Time to Bake: 20 minutes.</li>
-                    <li>Serves: 4 people.</li>
+                    <li id="show-time-to-bake">Time to Bake: 20 minutes.</li>
+                    <li id="show-serve">Serves: 4 people.</li>
                 </ul>
                 <hr>
                 <h3 style="text-align: center">Ingredients:</h3>
                 <button class="search-button" style="text-align: center">Add Ingredients to Shopping List</button>
-                <ul>
+                <ul id="show-ingredients">
                     <li>200g Baking Soda</li>
                     <li>250g Flour</li>
                     <li>5 Glowsticks</li>
                 </ul>
                 <hr>
                 <h3 style="text-align: center">Steps:</h3>
-                <ol>
+                <ol id="show-steps">
                     <li>Add the baking soda and flour to a large pot. Stir.</li><br>
                     <li>After five minutes of stirring the powder, break the glowsticks and add them into the pot.</li><br>
                     <li>Add 500g of water from the tap.</li><br>
                     <li>Bake for 20 minutes in the oven.</li><br>
                     <li>Serve to your guests when hot and run for the hills.</li><br>
                 </ol>
+                <hr>
+                <button class="search-button" onclick="editRecipe()">Edit Recipe</button><br><br>
+                <button class="search-button" onclick="deleteRecipe()">Delete Recipe</button><br>
+            </div>
+
+            <div id="recipe-create" class="recipe-create" style="display: none">
+                <input id="recipe-name" class="search-box" style="text-align: center; font-size: 20px" type="text" placeholder="Recipe Name">
+                <textarea id="recipe-description" class="recipe-description">Enter recipe description here.</textarea>
+                <hr>
+                <ul>
+                    <input id="bake-time" class="search-box" style="text-align: center; font-size: 14px" type="text" placeholder="Time to Bake">
+                    <input id="serving-size" class="search-box" style="text-align: center; font-size: 14px" type="text" placeholder="Serving Size">
+                </ul>
+                <hr>
+                <h3 style="text-align: center">Ingredients:</h3>
+                <button class="search-button" style="text-align: center" onclick="addIngredient()">Add Ingredient</button><br><br>
+                <div id="ingredient-list">
+                    <input id="ingredient1" class="search-box" style="text-align: center; font-size: 15px" type="text" placeholder="Ingredient">
+                    <button class="remove-button">Remove</button><br><br>
+                    <input id="ingredient2" class="search-box" style="text-align: center; font-size: 15px" type="text" placeholder="Ingredient">
+                    <button class="remove-button">Remove</button><br><br>
+                </div>
+                <hr>
+                <h3 style="text-align: center">Steps:</h3>
+                <button class="search-button" style="text-align: center" onclick="addStep()">Add Step</button><br><br>
+                <div id="step-list">
+                    <textarea id="step1" class="recipe-description">Enter step.</textarea>
+                    <button class="remove-button">Remove</button><br><br>
+                    <textarea id="step2" class="recipe-description">Enter step.</textarea>
+                    <button class="remove-button">Remove</button><br><br>
+                </div>
+                <hr>
+                <button class="search-button" onclick="addRecipe()">Save Recipe</button><br><br>
+                <button class="search-button" onclick="cancelCreate()">Cancel</button><br>
             </div>
         </div>
     </body>

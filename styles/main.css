@@ -9,7 +9,7 @@ body {
 }
 
 div.navigation {
-    background-color: antiquewhite;
+    background-color: grey;
     position: fixed;
     bottom: 1%;
     width: 100%;
@@ -38,7 +38,7 @@ a.navigation:hover, a.navigation:active {
     left: 0;
 
     background-image: linear-gradient(to right, white 99.8%, black 0.2%);
-    height: 81%;
+    height: 82%;
 }
 
 .recipe-main {
@@ -49,6 +49,18 @@ a.navigation:hover, a.navigation:active {
     text-align: left;
 
     right: 0;
+    height: 82%;
+}
+
+.recipe-create {
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    overflow-x: hidden;
+    text-align: center;
+
+    right: 0;
+    height: 82%;
 }
 
 .recipe-button {
@@ -82,4 +94,28 @@ a.navigation:hover, a.navigation:active {
 
 .search-button:hover {
     background-color: #00cc3d;
+}
+
+.remove-button {
+    border: none;
+    color: white;
+    background-color: red;
+    padding: 10px 25px;
+    font-size: 12px;
+    border-radius: 12px;
+}
+
+.remove-button:hover {
+    background-color: #ff3737;
+}
+
+.recipe-description {
+    width: 85%;
+    height: 50px;
+    padding: 12px 12px;
+    background-color: #f8f8f8;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    resize: vertical;
 }
