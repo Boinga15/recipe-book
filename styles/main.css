@@ -101,6 +101,7 @@ a.navigation:hover, a.navigation:active {
     color: white;
     background-color: red;
     padding: 10px 25px;
+    margin: 8px;
     font-size: 12px;
     border-radius: 12px;
 }

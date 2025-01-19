@@ -1,0 +1,23 @@
+.shopping-main {
+    text-align: center;
+}
+
+.shopping-entry {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+.shopping-delete {
+    border: none;
+    color: white;
+    background-color: red;
+    padding: 10px 25px;
+    margin: 8px;
+    font-size: 12px;
+    border-radius: 12px;
+}
+
+.shopping-delete:hover {
+    background-color: #ff3737;
+}
