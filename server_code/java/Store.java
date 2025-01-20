@@ -36,8 +36,11 @@ public class Store {
             if (!uniqueUsername) {
                 System.out.println("-1"); // User already exists.
             } else {
+                Encoder encoder = new Encoder();
+                String[] passwordParts = encoder.encode(password);
+
                 stmt = c.createStatement();
-                sql = "INSERT INTO Users (UserID, Username, Passmain, Passkey) VALUES ('" + (result + 1) + "', '" + username + "', '" + password + "', '" + password + "');";
+                sql = "INSERT INTO Users (UserID, Username, Passmain, Passkey) VALUES ('" + (result + 1) + "', '" + username + "', '" + passwordParts[0] + "', '" + passwordParts[1] + "');";
                 stmt.executeUpdate(sql);
                 stmt.close();
 
@@ -56,7 +59,7 @@ public class Store {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:database.db");
 
-            createUser(c, "Username", "Password");
+            createUser(c, "Boinga15", "Test2");
 
             c.close();
         } catch (Exception e) {
