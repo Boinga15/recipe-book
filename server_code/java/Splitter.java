@@ -31,4 +31,18 @@ public class Splitter {
 
         return finalArguments;
     }
+
+    public String apostropheEscape(String ogString) {
+        String newString = "";
+
+        for(int i = 0; i < ogString.length(); i++) {
+            if (ogString.charAt(i) == '\'') {
+                newString += "''";
+            } else {
+                newString += ogString.charAt(i);
+            }
+        }
+
+        return newString;
+    }
 }

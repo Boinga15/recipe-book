@@ -5,6 +5,10 @@ public class Validator {
 
     static boolean validateUser(Connection c, String username, String password) {
         try {
+            Splitter splitter = new Splitter();
+            String eUsername = splitter.apostropheEscape(username);
+            String ePassword = splitter.apostropheEscape(password);
+            
             Statement stmt = null;
 
             boolean isValid = false;
@@ -12,7 +16,7 @@ public class Validator {
             Encoder encoder = new Encoder();
 
             stmt = c.createStatement();
-            String sql = "SELECT Username, Passmain, Passkey FROM Users WHERE Username = '" + username + "';";
+            String sql = "SELECT Username, Passmain, Passkey FROM Users WHERE Username = '" + eUsername + "';";
             var sqlResult = stmt.executeQuery(sql);
             
             while (sqlResult.next()) {

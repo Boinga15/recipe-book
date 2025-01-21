@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Store {
     static void addIngredient(Connection c, String ingredient, int order, int RecipeID) {
@@ -23,8 +24,11 @@ public class Store {
             sqlResult.close();
             stmt.close();
 
+            Splitter splitter = new Splitter();
+            String eIngredient = splitter.apostropheEscape(ingredient);
+
             stmt = c.createStatement();
-            sql = "INSERT INTO Ingredients (IngredientID, RecipeID, ItemOrder, Name) VALUES ('" + ingredientID + "', '" + RecipeID + "', '" + order + "', '" + ingredient + "');";
+            sql = "INSERT INTO Ingredients (IngredientID, RecipeID, ItemOrder, Name) VALUES ('" + ingredientID + "', '" + RecipeID + "', '" + order + "', '" + eIngredient + "');";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (Exception e) {
@@ -53,8 +57,11 @@ public class Store {
             sqlResult.close();
             stmt.close();
 
+            Splitter splitter = new Splitter();
+            String eStep = splitter.apostropheEscape(step);
+
             stmt = c.createStatement();
-            sql = "INSERT INTO Steps (StepID, RecipeID, ItemOrder, Step) VALUES ('" + stepID + "', '" + RecipeID + "', '" + order + "', '" + step + "');";
+            sql = "INSERT INTO Steps (StepID, RecipeID, ItemOrder, Step) VALUES ('" + stepID + "', '" + RecipeID + "', '" + order + "', '" + eStep + "');";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (Exception e) {
@@ -83,8 +90,11 @@ public class Store {
             sqlResult.close();
             stmt.close();
 
+            Splitter splitter = new Splitter();
+            String eUsername = splitter.apostropheEscape(username);
+
             stmt = c.createStatement();
-            sql = "SELECT Username FROM Users WHERE Username = '" + username + "';";
+            sql = "SELECT Username FROM Users WHERE Username = '" + eUsername + "';";
             var sqlResult2 = stmt.executeQuery(sql);
 
             while (sqlResult2.next()) {
@@ -100,8 +110,11 @@ public class Store {
                 Encoder encoder = new Encoder();
                 String[] passwordParts = encoder.encode(password);
 
+                String ePasswordMain = splitter.apostropheEscape(passwordParts[0]);
+                String ePasswordKey = splitter.apostropheEscape(passwordParts[1]);
+
                 stmt = c.createStatement();
-                sql = "INSERT INTO Users (UserID, Username, Passmain, Passkey) VALUES ('" + (result + 1) + "', '" + username + "', '" + passwordParts[0] + "', '" + passwordParts[1] + "');";
+                sql = "INSERT INTO Users (UserID, Username, Passmain, Passkey) VALUES ('" + (result + 1) + "', '" + eUsername + "', '" + ePasswordMain + "', '" + ePasswordKey + "');";
                 stmt.executeUpdate(sql);
                 stmt.close();
 
@@ -117,10 +130,13 @@ public class Store {
         Validator validator = new Validator();
         if (validator.validateUser(c, username, password)) {
             try {
+                Splitter splitter = new Splitter();
+                String eUsername = splitter.apostropheEscape(username);
+
                 Statement stmt = null;
 
                 stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + username + "';";
+                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
                 var sqlResult = stmt.executeQuery(sql);
 
                 int userID = 0;
@@ -168,8 +184,10 @@ public class Store {
                 sqlResult.close();
                 stmt.close();
 
+                String editedItem = splitter.apostropheEscape(item);
+
                 stmt = c.createStatement();
-                sql = "INSERT INTO ShoppingList (ItemID, UserID, ItemOrder, Item) VALUES ('" + shoppingID + "', '" + userID + "', '" + shoppingOrder + "', '" + item + "');";
+                sql = "INSERT INTO ShoppingList (ItemID, UserID, ItemOrder, Item) VALUES ('" + shoppingID + "', '" + userID + "', '" + shoppingOrder + "', '" + editedItem + "');";
                 stmt.executeUpdate(sql);
                 stmt.close();
 
@@ -187,13 +205,14 @@ public class Store {
         if (validator.validateUser(c, username, password)) {
             try {
                 Splitter splitter = new Splitter();
+                String eUsername = splitter.apostropheEscape(username);
 
                 ArrayList<ArrayList<String>> finalArguments = splitter.recipeArgumentSplit(arguments);
 
                 Statement stmt = null;
 
                 stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + username + "';";
+                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
                 var sqlResult = stmt.executeQuery(sql);
 
                 int userID = 0;
@@ -234,9 +253,14 @@ public class Store {
                     addStep(c, finalArguments.get(2).get(i), i, recipeID);
                 }
 
+                String eName = splitter.apostropheEscape(finalArguments.get(0).get(0));
+                String eDescription = splitter.apostropheEscape(finalArguments.get(0).get(1));
+                String eTimeToBake = splitter.apostropheEscape(finalArguments.get(0).get(2));
+                String eServingSize = splitter.apostropheEscape(finalArguments.get(0).get(3));
+
                 // Recipe
                 stmt = c.createStatement();
-                sql = "INSERT INTO Recipes (RecipeID, UserID, Name, Description, TimeToBake, ServingSize) VALUES ('" + recipeID + "', '" + userID + "', '" + finalArguments.get(0).get(0) + "', '" + finalArguments.get(0).get(1) + "', '" + finalArguments.get(0).get(2) + "', '" + finalArguments.get(0).get(3) + "');";
+                sql = "INSERT INTO Recipes (RecipeID, UserID, Name, Description, TimeToBake, ServingSize) VALUES ('" + recipeID + "', '" + userID + "', '" + eName + "', '" + eDescription + "', '" + eTimeToBake + "', '" + eServingSize + "');";
                 stmt.executeUpdate(sql);
                 stmt.close();
 
@@ -257,9 +281,28 @@ public class Store {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:database.db");
 
+            switch (args[0]) {
+                case "CreateUser": // "CreateUser", Username, Password
+                    createUser(c, args[1], args[2]);
+                    break;
+                
+                case "AddShopping": // "AddShopping", Username, Password, Item
+                    addShoppingItem(c, args[1], args[2], args[3]);
+                    break;
+                
+                case "AddRecipe": // "AddRecipe", Username, Password, Recipe Arguments
+                    String[] recipeArgumets = Arrays.copyOfRange(args, 3, args.length);
+                    addRecipe(c, args[1], args[2], recipeArgumets);
+                    break;
+                
+                default:
+                    System.out.println("ERROR ENCOUNTERED: Invalid store command.");
+                    break;
+            }
+
             c.close();
         } catch (Exception e) {
-            System.out.println("ERROR ENCOUNTERED: Couldn't reach database. === " + e);
+            System.out.println("ERROR ENCOUNTERED:" + e);
         }
     }
 }
