@@ -34,4 +34,23 @@ public class Validator {
             return false;
         }
     }
+
+    public static void main(String[] args) {
+        Connection c = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:database.db");
+
+            if(validateUser(c, args[0], args[1])) {
+                System.out.println("1"); // User validated.
+            } else {
+                System.out.println("-1"); // User not validated.
+            }
+
+            c.close();
+        } catch (Exception e) {
+            System.out.println("ERROR ENCOUNTERED:" + e);
+        }
+    }
 }
