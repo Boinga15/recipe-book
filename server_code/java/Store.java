@@ -136,13 +136,13 @@ public class Store {
                 Statement stmt = null;
 
                 stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
+                String sql = "SELECT UserID, Username FROM Users;";
                 var sqlResult = stmt.executeQuery(sql);
 
                 int userID = 0;
                 
                 while (sqlResult.next()) {
-                    if (username == sqlResult.getString("Username")) {
+                    if (username.equals(sqlResult.getString("Username"))) {
                         userID = sqlResult.getInt("UserID");
                     }
                 }
@@ -218,7 +218,7 @@ public class Store {
                 int userID = 0;
                 
                 while (sqlResult.next()) {
-                    if (username == sqlResult.getString("Username")) {
+                    if (username.equals(sqlResult.getString("Username"))) {
                         userID = sqlResult.getInt("UserID");
                     }
                 }
