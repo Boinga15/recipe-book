@@ -6,5 +6,5 @@ The demonsrtation, as of now, will simply use a local host to run the server. In
 
 To run tests on the backend, you can run the Java file Store.java, Get.java, and Delete.java using:<br>
 java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Store <i>ARGUMENTS</i><br>
-java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Get <i>ARGUMENTS</i>
+java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Get <i>ARGUMENTS</i><br>
 java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Delete <i>ARGUMENTS</i>
