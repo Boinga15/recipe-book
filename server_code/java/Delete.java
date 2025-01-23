@@ -1,5 +1,8 @@
 import java.sql.*;
 
+import helperClasses.Splitter;
+import helperClasses.Validator;
+
 public class Delete {
     static void deleteShopping(Connection c, String username, String password, String itemOrder) {
         Validator validator = new Validator();
@@ -169,7 +172,7 @@ public class Delete {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:database.db");
+            c = DriverManager.getConnection("jdbc:sqlite:utilityItems/database.db");
 
             switch (args[0]) {
                 case "DeleteShopping": // "DeleteShopping", Username, Password, Item Order

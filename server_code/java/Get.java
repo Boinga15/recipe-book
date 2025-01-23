@@ -1,5 +1,8 @@
 import java.sql.*;
 
+import helperClasses.Splitter;
+import helperClasses.Validator;
+
 public class Get {
     static String getShoppingList(Connection c, String username, String password) {
         Validator validator = new Validator();
@@ -152,7 +155,7 @@ public class Get {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:database.db");
+            c = DriverManager.getConnection("jdbc:utilityItems/sqlite:database.db");
 
             String result = "";
 

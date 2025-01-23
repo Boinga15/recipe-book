@@ -2,6 +2,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import helperClasses.Splitter;
+import helperClasses.Validator;
+import helperClasses.Encoder;
+
 public class Store {
     static void addIngredient(Connection c, String ingredient, int order, int RecipeID) {
         try {
@@ -279,7 +283,7 @@ public class Store {
 
         try {
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:database.db");
+            c = DriverManager.getConnection("jdbc:sqlite:utilityItems/database.db");
 
             switch (args[0]) {
                 case "CreateUser": // "CreateUser", Username, Password

@@ -1,3 +1,5 @@
+package helperClasses;
+
 public class Encoder {
     public Encoder() {}
 

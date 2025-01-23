@@ -1,9 +1,11 @@
+package helperClasses;
+
 import java.sql.*;
 
 public class Validator {
     public Validator() {}
 
-    static boolean validateUser(Connection c, String username, String password) {
+    public static boolean validateUser(Connection c, String username, String password) {
         try {
             Splitter splitter = new Splitter();
             String eUsername = splitter.apostropheEscape(username);
