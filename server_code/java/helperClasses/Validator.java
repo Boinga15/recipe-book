@@ -2,57 +2,42 @@ package helperClasses;
 
 import java.sql.*;
 
+import SQL.*;
+
 public class Validator {
     public Validator() {}
 
-    public static boolean validateUser(Connection c, String username, String password) {
+    public static boolean validateUser(SQLFactory factory, String username, String password) {
+        Splitter splitter = new Splitter();
+        String eUsername = splitter.apostropheEscape(username);
+        String ePassword = splitter.apostropheEscape(password);
+
+        boolean isValid = false;
+
+        Encoder encoder = new Encoder();
+
+        factory.doQuery("SELECT Username, Passmain, Passkey FROM Users WHERE Username = '" + eUsername + "';");
+        ResultSet results = factory.fetchQuery().getResult();
         try {
-            Splitter splitter = new Splitter();
-            String eUsername = splitter.apostropheEscape(username);
-            String ePassword = splitter.apostropheEscape(password);
-            
-            Statement stmt = null;
-
-            boolean isValid = false;
-
-            Encoder encoder = new Encoder();
-
-            stmt = c.createStatement();
-            String sql = "SELECT Username, Passmain, Passkey FROM Users WHERE Username = '" + eUsername + "';";
-            var sqlResult = stmt.executeQuery(sql);
-            
-            while (sqlResult.next()) {
-                if (password.equals(encoder.decode(sqlResult.getString("Passmain"), sqlResult.getString("Passkey")))) {
+            while (results.next()) {
+                if (password.equals(encoder.decode(results.getString("Passmain"), results.getString("Passkey")))) {
                     isValid = true;
                 }
             }
-
-            sqlResult.close();
-            stmt.close();
-
-            return isValid;
         } catch (Exception e) {
             System.out.println("ERROR ENCOUNTERED: " + e);
-            return false;
         }
+
+        return isValid;
     }
 
     public static void main(String[] args) {
-        Connection c = null;
+        SQLFactory sqlFactory = new SQLFactory();
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:database.db");
-
-            if(validateUser(c, args[0], args[1])) {
-                System.out.println("1"); // User validated.
-            } else {
-                System.out.println("-1"); // User not validated.
-            }
-
-            c.close();
-        } catch (Exception e) {
-            System.out.println("ERROR ENCOUNTERED:" + e);
+        if (validateUser(sqlFactory, args[0], args[1])) {
+            System.out.println("1");
+        } else {
+            System.out.println("-1");
         }
     }
 }

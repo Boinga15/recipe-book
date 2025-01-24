@@ -5,6 +5,6 @@ The app will, once completed, allow users to login to accounts through a secure 
 The demonsrtation, as of now, will simply use a local host to run the server. In its current state, it is not meant to be run on an external server yet.
 
 To run tests on the backend, you can run the Java file Store.java, Get.java, and Delete.java using:<br>
-java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Store <i>ARGUMENTS</i><br>
-java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Get <i>ARGUMENTS</i><br>
-java -classpath ".;sqlite-jdbc-3.48.0.0.jar" Delete <i>ARGUMENTS</i>
+java -classpath ".;utilityItems\sqlite-jdbc-3.48.0.0.jar" Store <i>ARGUMENTS</i><br>
+java -classpath ".;utilityItems\sqlite-jdbc-3.48.0.0.jar" Get <i>ARGUMENTS</i><br>
+java -classpath ".;utilityItems\sqlite-jdbc-3.48.0.0.jar" Delete <i>ARGUMENTS</i>

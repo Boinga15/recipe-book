@@ -3,198 +3,101 @@ import java.sql.*;
 import helperClasses.Splitter;
 import helperClasses.Validator;
 
+import SQL.*;
+
 public class Delete {
-    static void deleteShopping(Connection c, String username, String password, String itemOrder) {
+    static void deleteRecipe(SQLFactory factory, String username, String password, String recipeName) {
         Validator validator = new Validator();
-        if (validator.validateUser(c, username, password)) {
+        if (validator.validateUser(factory, username, password)) {
             try {
                 Splitter splitter = new Splitter();
                 String eUsername = splitter.apostropheEscape(username);
 
-                Statement stmt = null;
-
-                stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
-                var sqlResult = stmt.executeQuery(sql);
-
-                int userID = 0;
-                
-                while (sqlResult.next()) {
-                    if (username.equals(sqlResult.getString("Username"))) {
-                        userID = sqlResult.getInt("UserID");
-                    }
-                }
-
-                sqlResult.close();
-                stmt.close();
-
-                stmt = c.createStatement();
-                sql = "DELETE FROM ShoppingList WHERE ItemOrder == " + itemOrder + " AND UserID == " + userID + ";";
-                stmt.executeUpdate(sql);
-                stmt.close();
-
-                System.out.println("1");
-            } catch (Exception e) {
-                System.out.println("Error Encountered: " + e);
-            }
-        } else {
-            System.out.println("Login failed.");
-        }
-    }
-
-    static void deleteRecipe(Connection c, String username, String password, String recipeName) {
-        Validator validator = new Validator();
-        if (validator.validateUser(c, username, password)) {
-            try {
-                Splitter splitter = new Splitter();
-                String eUsername = splitter.apostropheEscape(username);
-
-                Statement stmt = null;
-
-                stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
-                var sqlResult = stmt.executeQuery(sql);
-
-                int userID = 0;
-                
-                while (sqlResult.next()) {
-                    if (username.equals(sqlResult.getString("Username"))) {
-                        userID = sqlResult.getInt("UserID");
-                    }
-                }
-
-                sqlResult.close();
-                stmt.close();
+                factory.doQuery("SELECT UserID, Username FROM Users;");
+                int userID = factory.fetchQuery().getUserID(username);
 
                 String eRecipeName = splitter.apostropheEscape(recipeName);
 
-                stmt = c.createStatement();
-                sql = "SELECT RecipeID FROM Recipes INNER JOIN Users ON Users.UserID == Recipes.UserID WHERE Users.UserID == " + userID + " AND Recipes.Name == '" + eRecipeName + "';";
-                sqlResult = stmt.executeQuery(sql);
-
                 int recipeID = 0;
 
-                while (sqlResult.next()) {
-                    recipeID = sqlResult.getInt("RecipeID");
+                factory.doQuery("SELECT RecipeID FROM Recipes INNER JOIN Users ON Users.UserID == Recipes.UserID WHERE Users.UserID == " + userID + " AND Recipes.Name == '" + eRecipeName + "';");
+
+                ResultSet result = factory.fetchQuery().getResult();
+
+                while (result.next()) {
+                    recipeID = result.getInt("RecipeID");
                 }
 
-                sqlResult.close();
-                stmt.close();
-
                 // Deletion Step
-                stmt = c.createStatement();
-                sql = "DELETE FROM Steps WHERE RecipeID == " + recipeID + ";";
-                stmt.executeUpdate(sql);
-                stmt.close();
+                factory.doExecute("DELETE FROM Steps WHERE RecipeID == " + recipeID + ";");
+                factory.doExecute("DELETE FROM Ingredients WHERE RecipeID == " + recipeID + ";");
+                factory.doExecute("DELETE FROM Recipes WHERE RecipeID == " + recipeID + " AND UserID == " + userID + ";");
 
-                stmt = c.createStatement();
-                sql = "DELETE FROM Ingredients WHERE RecipeID == " + recipeID + ";";
-                stmt.executeUpdate(sql);
-                stmt.close();
-
-                stmt = c.createStatement();
-                sql = "DELETE FROM Recipes WHERE RecipeID == " + recipeID + " AND UserID == " + userID + ";";
-                stmt.executeUpdate(sql);
-                stmt.close();
-
+                factory.closeQuery();
                 System.out.println("1");
             } catch (Exception e) {
+                factory.closeQuery();
                 System.out.println("Error Encountered: " + e);
             }
         } else {
+            factory.closeQuery();
             System.out.println("Login failed.");
         }
     }
 
-    static void deleteUser(Connection c, String username, String password) {
+    static void deleteUser(SQLFactory factory, String username, String password) {
         Validator validator = new Validator();
-        if (validator.validateUser(c, username, password)) {
+        if (validator.validateUser(factory, username, password)) {
             try {
                 Splitter splitter = new Splitter();
                 String eUsername = splitter.apostropheEscape(username);
 
-                Statement stmt = null;
+                factory.doQuery("SELECT UserID, Username FROM Users;");
+                int userID = factory.fetchQuery().getUserID(username);
 
-                stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
-                var sqlResult = stmt.executeQuery(sql);
-
-                int userID = 0;
-                
-                while (sqlResult.next()) {
-                    if (username.equals(sqlResult.getString("Username"))) {
-                        userID = sqlResult.getInt("UserID");
-                    }
-                }
-
-                sqlResult.close();
-                stmt.close();
-
-                stmt = c.createStatement();
-                sql = "DELETE FROM ShoppingList WHERE UserID == " + userID + ";";
-                stmt.executeUpdate(sql);
-                stmt.close();
-
+                // Shopping List
+                factory.doExecute("DELETE FROM ShoppingList WHERE UserID == " + userID + ";");
                 
                 // Recipes
-                stmt = c.createStatement();
-                sql = "SELECT Name FROM Recipes WHERE UserID == " + userID + ";";
-                sqlResult = stmt.executeQuery(sql);
+                factory.doQuery("SELECT Name FROM Recipes WHERE UserID == " + userID + ";");
 
-                int recipeID = 0;
+                ResultSet result = factory.fetchQuery().getResult();
 
-                while (sqlResult.next()) {
-                    String name = sqlResult.getString("Name");
-                    deleteRecipe(c, username, password, name);
+                while (result.next()) {
+                    String name = result.getString("Name");
+                    deleteRecipe(factory, username, password, name);
                 }
 
-                sqlResult.close();
-                stmt.close();
-
-
                 // User
-                stmt = c.createStatement();
-                sql = "DELETE FROM Users WHERE UserID == " + userID + ";";
-                stmt.executeUpdate(sql);
-                stmt.close();
+                factory.doExecute("DELETE FROM Users WHERE UserID == " + userID + ";");
 
+                factory.closeQuery();
                 System.out.println("1");
             } catch (Exception e) {
+                factory.closeQuery();
                 System.out.println("Error Encountered: " + e);
             }
         } else {
+            factory.closeQuery();
             System.out.println("Login failed.");
         }
     }
 
     public static void main(String[] args) {
-        Connection c = null;
+        SQLFactory sqlFactory = new SQLFactory();
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:utilityItems/database.db");
+        switch (args[0]) {
+            case "DeleteRecipe": // "DeleteRecipe", Username, Password, Recipe Name
+                deleteRecipe(sqlFactory, args[1], args[2], args[3]);
+                break;
 
-            switch (args[0]) {
-                case "DeleteShopping": // "DeleteShopping", Username, Password, Item Order
-                    deleteShopping(c, args[1], args[2], args[3]);
-                    break;
-
-                case "DeleteRecipe": // "DeleteRecipe", Username, Password, Recipe Name
-                    deleteRecipe(c, args[1], args[2], args[3]);
-                    break;
-
-                case "DeleteUser": // "DeleteRecipe", Username, Password, Recipe Name
-                    deleteUser(c, args[1], args[2]);
-                    break;
-                
-                default:
-                    System.out.println("ERROR ENCOUNTERED: Invalid get command.");
-                    break;
-            }
-
-            c.close();
-        } catch (Exception e) {
-            System.out.println("ERROR ENCOUNTERED:" + e);
+            case "DeleteUser": // "DeleteRecipe", Username, Password, Recipe Name
+                deleteUser(sqlFactory, args[1], args[2]);
+                break;
+            
+            default:
+                System.out.println("ERROR ENCOUNTERED: Invalid get command.");
+                break;
         }
     }
 }

@@ -3,48 +3,34 @@ import java.sql.*;
 import helperClasses.Splitter;
 import helperClasses.Validator;
 
+import SQL.*;
+
 public class Get {
-    static String getShoppingList(Connection c, String username, String password) {
+    static String getShoppingList(SQLFactory factory, String username, String password) {
         Validator validator = new Validator();
-        if (validator.validateUser(c, username, password)) {
+        if (validator.validateUser(factory, username, password)) {
             try {
                 Splitter splitter = new Splitter();
                 String eUsername = splitter.apostropheEscape(username);
 
-                Statement stmt = null;
+                factory.doQuery("SELECT UserID, Username FROM Users;");
+                int userID = factory.fetchQuery().getUserID(username);
 
-                stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
-                var sqlResult = stmt.executeQuery(sql);
-
-                int userID = 0;
-                
-                while (sqlResult.next()) {
-                    if (username.equals(sqlResult.getString("Username"))) {
-                        userID = sqlResult.getInt("UserID");
-                    }
-                }
-
-                sqlResult.close();
-                stmt.close();
-
-                stmt = c.createStatement();
-                sql = "SELECT Item FROM ShoppingList INNER JOIN Users ON ShoppingList.UserID = Users.UserID WHERE Users.UserID = " + userID + ";";
-                sqlResult = stmt.executeQuery(sql);
+                factory.doQuery("SELECT Item FROM ShoppingList INNER JOIN Users ON ShoppingList.UserID = Users.UserID WHERE Users.UserID = " + userID + ";");
 
                 String finalResult = "";
 
-                while (sqlResult.next()) {
-                    finalResult += sqlResult.getString("Item");
+                ResultSet result = factory.fetchQuery().getResult();
+                while (result.next()) {
+                    finalResult += result.getString("Item");
                     finalResult += "|";
                 }
 
-                sqlResult.close();
-                stmt.close();
-
+                factory.closeQuery();
                 return finalResult;
             } catch (Exception e) {
                 System.out.println("Error Encountered: " + e);
+                factory.closeQuery();
                 return "-1";
             }
         } else {
@@ -53,31 +39,15 @@ public class Get {
         }
     }
 
-    static String getRecipes(Connection c, String username, String password) {
+    static String getRecipes(SQLFactory factory, String username, String password) {
         Validator validator = new Validator();
-        if (validator.validateUser(c, username, password)) {
+        if (validator.validateUser(factory, username, password)) {
             try {
                 Splitter splitter = new Splitter();
                 String eUsername = splitter.apostropheEscape(username);
 
-                Statement stmt = null;
-
-                stmt = c.createStatement();
-                String sql = "SELECT UserID, Username FROM Users WHERE Username = '" + eUsername + "';";
-                var sqlResult = stmt.executeQuery(sql);
-
-                int userID = 0;
-                
-                while (sqlResult.next()) {
-                    if (username.equals(sqlResult.getString("Username"))) {
-                        userID = sqlResult.getInt("UserID");
-                    }
-                }
-
-                sqlResult.close();
-                stmt.close();
-
-                String finalResult = "";
+                factory.doQuery("SELECT UserID, Username FROM Users;");
+                int userID = factory.fetchQuery().getUserID(username);
 
                 /*
                 | ---> New Element
@@ -85,60 +55,55 @@ public class Get {
                 ||| ---> Next Recipe
                 */
 
-                stmt = c.createStatement();
-                sql = "SELECT RecipeID, Name, Description, TimeToBake, ServingSize FROM Recipes INNER JOIN Users ON Users.UserID == Recipes.UserID  WHERE Users.UserID == " + userID + " ORDER BY Recipes.Name;";
-                sqlResult = stmt.executeQuery(sql);
+                factory.doQuery("SELECT RecipeID, Name, Description, TimeToBake, ServingSize FROM Recipes INNER JOIN Users ON Users.UserID == Recipes.UserID  WHERE Users.UserID == " + userID + " ORDER BY Recipes.Name;");
 
-                while (sqlResult.next()) {
+                String finalResult = "";
+
+                ResultSet result = factory.fetchQuery().getResult();
+
+                while (result.next()) {
                     // Basic Information
-                    finalResult += sqlResult.getString("Name");
+                    finalResult += result.getString("Name");
                     finalResult += "|";
 
-                    finalResult += sqlResult.getString("Description");
+                    finalResult += result.getString("Description");
                     finalResult += "|";
 
-                    finalResult += sqlResult.getString("TimeToBake");
+                    finalResult += result.getString("TimeToBake");
                     finalResult += "|";
 
-                    finalResult += sqlResult.getString("ServingSize");
+                    finalResult += result.getString("ServingSize");
                     finalResult += "|";
 
                     // Ingredients
-                    int recipeID = sqlResult.getInt("RecipeID");
+                    int recipeID = result.getInt("RecipeID");
+                    SQLFactory sqlFactoryMinor = new SQLFactory();
 
-                    Statement stmt2 = c.createStatement();
-                    String sql2 = "SELECT Ingredients.Name FROM Ingredients INNER JOIN Recipes ON Ingredients.RecipeID == Recipes.RecipeID WHERE Recipes.RecipeID == " + recipeID + " ORDER BY Ingredients.ItemOrder;";
-                    var sqlResult2 = stmt2.executeQuery(sql2);
+                    sqlFactoryMinor.doQuery("SELECT Ingredients.Name FROM Ingredients INNER JOIN Recipes ON Ingredients.RecipeID == Recipes.RecipeID WHERE Recipes.RecipeID == " + recipeID + " ORDER BY Ingredients.ItemOrder;");
+                    ResultSet result2 = sqlFactoryMinor.fetchQuery().getResult();
 
-                    while (sqlResult2.next()) {
-                        finalResult += sqlResult2.getString("Name");
+                    while (result2.next()) {
+                        finalResult += result2.getString("Name");
                         finalResult += "|";
                     }
-
-                    sqlResult2.close();
-                    stmt2.close();
 
                     finalResult += "|";
 
                     // Steps
-                    stmt2 = c.createStatement();
-                    sql2 = "SELECT Steps.Step FROM Steps INNER JOIN Recipes ON Steps.RecipeID == Recipes.RecipeID WHERE Recipes.RecipeID == " + recipeID + " ORDER BY Steps.ItemOrder;";
-                    sqlResult2 = stmt2.executeQuery(sql2);
+                    sqlFactoryMinor.doQuery("SELECT Steps.Step FROM Steps INNER JOIN Recipes ON Steps.RecipeID == Recipes.RecipeID WHERE Recipes.RecipeID == " + recipeID + " ORDER BY Steps.ItemOrder;");
+                    result2 = sqlFactoryMinor.fetchQuery().getResult();
 
-                    while (sqlResult2.next()) {
-                        finalResult += sqlResult2.getString("Step");
+                    while (result2.next()) {
+                        finalResult += result2.getString("Step");
                         finalResult += "|";
                     }
 
-                    sqlResult2.close();
-                    stmt2.close();
+                    sqlFactoryMinor.closeQuery();
 
                     finalResult += "||";
                 }
 
-                sqlResult.close();
-                stmt.close();
-
+                factory.closeQuery();
                 return finalResult;
             } catch (Exception e) {
                 System.out.println("Error Encountered: " + e);
@@ -151,33 +116,24 @@ public class Get {
     }
 
     public static void main(String[] args) {
-                Connection c = null;
+        SQLFactory sqlFactory = new SQLFactory();
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:utilityItems/sqlite:database.db");
+        String result = "";
 
-            String result = "";
+        switch (args[0]) {
+            case "GetShopping": // "GetShopping", Username, Password
+                result = getShoppingList(sqlFactory, args[1], args[2]);
+                break;
 
-            switch (args[0]) {
-                case "GetShopping": // "GetShopping", Username, Password
-                    result = getShoppingList(c, args[1], args[2]);
-                    break;
-
-                case "GetRecipes": // "GetRecipes", Username, Password
-                    result = getRecipes(c, args[1], args[2]);
-                    break;
-                
-                default:
-                    System.out.println("ERROR ENCOUNTERED: Invalid get command.");
-                    break;
-            }
-
-            System.out.println(result);
-
-            c.close();
-        } catch (Exception e) {
-            System.out.println("ERROR ENCOUNTERED:" + e);
+            case "GetRecipes": // "GetRecipes", Username, Password
+                result = getRecipes(sqlFactory, args[1], args[2]);
+                break;
+            
+            default:
+                System.out.println("ERROR ENCOUNTERED: Invalid get command.");
+                break;
         }
+
+        System.out.println(result);
     }
 }
