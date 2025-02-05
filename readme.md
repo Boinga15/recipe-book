@@ -8,3 +8,6 @@ To run tests on the backend, you can run the Java file Store.java, Get.java, and
 java -classpath ".;utilityItems\sqlite-jdbc-3.48.0.0.jar" Store <i>ARGUMENTS</i><br>
 java -classpath ".;utilityItems\sqlite-jdbc-3.48.0.0.jar" Get <i>ARGUMENTS</i><br>
 java -classpath ".;utilityItems\sqlite-jdbc-3.48.0.0.jar" Delete <i>ARGUMENTS</i>
+
+You can also start a PHP server for the frontend with:<br>
+php -S 127.0.0.1:8000
