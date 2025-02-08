@@ -28,7 +28,7 @@ public class Store {
         factory.closeQuery();
     }
 
-    static void createUser(SQLFactory factory, String username, String password) {
+    static void createUser(SQLFactory factory, String username, String password, String confirmPassword) {
         try {
             // Get next UserID.
             factory.doQuery("SELECT UserID FROM Users;");
@@ -48,6 +48,9 @@ public class Store {
             if (!uniqueUsername) {
                 factory.closeQuery();
                 System.out.println("-1"); // User already exists.
+            } else if (!password.equals(confirmPassword)) {
+                factory.closeQuery();
+                System.out.println("-2"); // User already exists.
             } else {
                 Encoder encoder = new Encoder();
                 String[] passwordParts = encoder.encode(password);
@@ -138,8 +141,8 @@ public class Store {
         SQLFactory sqlFactory = new SQLFactory();
 
         switch (args[0]) {
-            case "CreateUser": // "CreateUser", Username, Password
-                createUser(sqlFactory, args[1], args[2]);
+            case "CreateUser": // "CreateUser", Username, Password, Confirm Password
+                createUser(sqlFactory, args[1], args[2], args[3]);
                 break;
             
             case "RefreshShopping": // "RefreshShopping", Username, Password, Item

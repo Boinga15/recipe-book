@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Recipe Book</title>
+        <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/login.css">
+
+        <script src="server_code/jquery.js"></script>
+        <script src="scripts/login.js"></script>
+    </head>
+    <body>
+        <div class="title">
+            <h1>Recipe Book</h1>
+            <hr>
+        </div>
+
+        <br>
+        
+        <div class="login-body">
+            <h1 class="section-title">Login:</h1>
+            <h2>Username:</h2>
+            <input type="text" class="input-box-main" id="login-username">
+            <br><br>
+            <h2>Password:</h2>
+            <input type="password" class="input-box-main" id="login-password">
+            
+            <br><br>
+            <button class="main-button">Login</button>
+        </div>
+
+        <br><hr>
+
+        <div class="signup-body">
+            <h1 class="section-title">Signup:</h1>
+            <h2>Username:</h2>
+            <input type="text" class="input-box-main" id="signup-username">
+            <br><br>
+            <h2>Password:</h2>
+            <input type="password" class="input-box-main" id="signup-password">
+            <br><br>
+            <h2>Confirm Password:</h2>
+            <input type="password" class="input-box-main" id="signup-password-confirmation">
+
+            <br><br>
+            <button class="main-button" onclick="signup()">Signup</button>
+            <p id="signup-error" style="color: red;"></p>
+        </div>
+    </body>
+</html>

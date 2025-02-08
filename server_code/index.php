@@ -35,6 +35,8 @@
         echo $result;
     }
 
+    cors();
+
     $chosenAction = $_POST["action"];
     $extraInformation = array();
 
@@ -44,6 +46,7 @@
     while (array_key_exists($cKey, $_POST)) {
         $extraInformation[] = $_POST[$cKey];
         $currentItem += 1;
+        $cKey = "item_$currentItem";
     }
 
     executeQuery($chosenAction, $extraInformation);

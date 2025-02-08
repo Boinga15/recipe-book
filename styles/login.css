@@ -1,0 +1,29 @@
+body {
+    text-align: center;
+}
+
+.section-title {
+    font-size: 30px;
+}
+
+.input-box-main {
+    width: 40%;
+    padding: 12px 20px;
+    margin: 0px 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+.main-button {
+    border: none;
+    color: white;
+    background-color: green;
+    padding: 15px 32px;
+    font-size: 16px;
+    border-radius: 12px;
+    width: 20%;
+}
+
+.main-button:hover {
+    background-color: #00cc3d;
+}
