@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Podkova');
+
+body {
+    background-color: #fff0db;
+    font: 600 18px 'Podkova', sans-serif;
+    margin: 0px;
+}
+
+.main_card {
+    background-color: #ffffff;
+    margin: 20px;
+    padding: 1px 15px 1px 15px;
+    border-radius: 10px;
+}

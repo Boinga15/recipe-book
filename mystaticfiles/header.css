@@ -1,0 +1,18 @@
+.page_header_main {
+    background-color: #ADEBB3;
+    padding: 10px;
+}
+
+.page_header_main .link_button {
+    padding: 10px 20px 10px 20px;
+    background-color: #849d86;
+    border-color: #82a686;
+    border-radius: 12px;
+    color: #ffffff;
+    max-width: 150px;
+    width: 24%;
+}
+
+.page_header_main .account_button {
+    float: right;
+}

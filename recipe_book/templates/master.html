@@ -1,13 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 
 <html>
     <head>
         <title>Recipe Book</title>
+        <link rel="stylesheet" href="{% static "main.css" %}">
+        <link rel="stylesheet" href="{% static "header.css" %}">
         {% block metadata %}
         {% endblock %}
     </head>
 
     <body>
+        <div class="page_header_main">
+            <a href="/"><button class="link_button">Home</button></a>
+            <a href="/"><button class="link_button">Recipe List</button></a>
+            <a href="/"><button class="link_button">Shopping List</button></a>
+            <a href="/"><button class="link_button account_button">Login</button></a>
+        </div>
         {% block content %}
         {% endblock %}
     </body>

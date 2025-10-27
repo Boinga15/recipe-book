@@ -1,0 +1,12 @@
+.index_body {
+    text-align: center;
+}
+
+.index_body .header {
+    margin-bottom: 5px;
+}
+
+.index_body .subtitle {
+    color: #787878;
+    margin-top: 0px;
+}

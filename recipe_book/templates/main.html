@@ -1,5 +1,38 @@
 {% extends "master.html" %}
+{% load static %}
+
+{% block metadata %}
+<link rel="stylesheet" href="{% static "index.css" %}">
+{% endblock %}
 
 {% block content %}
-<h1>Recipe Book Application</h1>
+<div class="main_card">
+    <div class="index_body">
+        <h1 class="header">Recipe Book</h1>
+        <h5 class="subtitle">Your personal online recipe book and shopping list.</h5>
+    
+        <p>Welcome to the Recipe Book website, where you can write and store your own recipes, as well as browse recipes that others have created. You can also manage your own shopping list with ease so that you get exactly what you need for your recipes.</p>
+        
+        <hr>
+        <h2>Daily Featured Recipe</h2>
+        <hr>
+        <h2>Questions and Answers</h2>
+
+        <h3>"What can I add to my recipes?"</h3>
+        <p>You can give your recipes a subtitle and description to give people more context about what your dish is like. You can also add an ingredient list so that people can easily add those ingredients to their shopping list with a single click. Finally, you can both put a list of steps as instructions, as well as optionally an image if you want to give a visual look of your dish.</p>
+        
+        <h3>"Are all of my recieps public?"</h3>
+        <p>No. All of your recipes are set to private by default, meaning only you will be able to see them. You have to manually set them to public so that others can view them. Note that a recipe will only be public if you both set it to be so, and also it adheres to the guidelines.</p>
+    
+        <h3>"How do I use the shopping list?"</h3>
+        <p>By logging onto your account from your phone, you can access your shopping list while you're in stores so that you can remove items as you buy them. As for adding items, if you have a recipe you want to cook, you can press a single button to add that recipe's ingredients to your shopping list for later.</p>
+    
+        <h3>"Can I favourite recipes or like them?"</h3>
+        <p>Yes! You can like a recipe if you think it works well, and you can even pin recipes if you plan on cooking them later. Pinned and liked recipes show up in your own recipe list in their own section for later.</p>
+        <hr>
+        <h2>Guidelines</h2>
+        <p>Extreme use of profanities, derogatory and indecent content, and personally harmful content is a violation of the guidelines, and is punishable to varying degrees (from one of your recipes being permanently privated, to yoru account being disabled). For a full list of guidelines, please visit the <a href="terms">terms and conditions</a> for this website. If you plan on just using this website to make cooking recipes or view other recipes however, you should be completely fine.</p>
+    </div>
+</div>
+
 {% endblock %}
